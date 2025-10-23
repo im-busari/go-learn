@@ -3,12 +3,20 @@ package main
 // Why package name is not hello_world
 import "fmt"
 
+const spanish = "Spanish"
+
+const spanishHelloPrefix = "Hola, "
 const englishHelloPrefix = "Hello, "
 
-func Hello(name string) string {
+func Hello(name, language string) string {
 	if name == "" {
 		name = "World"
 	}
+
+	if language == spanish {
+		return spanishHelloPrefix + name
+	}
+
 	return englishHelloPrefix + name
 }
 

@@ -4,9 +4,11 @@ package main
 import "fmt"
 
 const spanish = "Spanish"
+const french = "French"
 
 const spanishHelloPrefix = "Hola, "
 const englishHelloPrefix = "Hello, "
+const frenchHelloPrefix = "Bonjour, "
 
 func Hello(name, language string) string {
 	if name == "" {
@@ -16,6 +18,9 @@ func Hello(name, language string) string {
 	if language == spanish {
 		return spanishHelloPrefix + name
 	}
+	if language == french {
+		return frenchHelloPrefix + name
+	}
 
 	return englishHelloPrefix + name
 }
@@ -23,5 +28,5 @@ func Hello(name, language string) string {
 // The fmt.Println is a side effect (printing to stdout), and the string we send in is our domain.
 // What are side effects in Go?
 func main() {
-	fmt.Println(Hello("world"))
+	fmt.Println(Hello("world", ""))
 }

@@ -15,14 +15,20 @@ func Hello(name, language string) string {
 		name = "World"
 	}
 
-	if language == spanish {
-		return spanishHelloPrefix + name
-	}
-	if language == french {
-		return frenchHelloPrefix + name
+	return greetingPrefix(language) + name
+}
+
+func greetingPrefix(language string) (prefix string) {
+	switch language {
+	case spanish:
+		prefix = spanishHelloPrefix
+	case french:
+		prefix = frenchHelloPrefix
+	default:
+		prefix = englishHelloPrefix
 	}
 
-	return englishHelloPrefix + name
+	return
 }
 
 // The fmt.Println is a side effect (printing to stdout), and the string we send in is our domain.

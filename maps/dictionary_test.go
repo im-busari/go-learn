@@ -52,6 +52,52 @@ func TestAdd(t *testing.T) {
 	})
 }
 
+func TestUpdate(t *testing.T) {
+	t.Run("update existing word", func(t *testing.T) {
+		word := "otter"
+
+		dictionary := Dictionary{word: "I am cute"}
+		err := dictionary.Update(word, "I am hungry")
+
+		assertError(t, err, nil)
+		assertDefinition(t, dictionary, word, "I am hungry")
+	})
+
+	t.Run("return error if word is missing", func(t *testing.T) {
+		dictionary := Dictionary{"whale": "I am cute"}
+		err := dictionary.Update("otter", "I am hungry")
+
+		assertError(t, err, ErrWordDoesNotExist)
+	})
+}
+
+func TestDelete(t *testing.T) {
+	t.Run("delete existing item", func(t *testing.T) {
+		word := "whale"
+		dictionary := Dictionary{word: "I am swimming"}
+
+		err := dictionary.Delete(word)
+		assertError(t, err, nil)
+
+		_, err = dictionary.Search(word)
+
+		assertError(t, err, ErrNotFound)
+	})
+
+	t.Run("delete non-existing item", func(t *testing.T) {
+		word := "whale"
+		dictionary := Dictionary{word: "I am swimming"}
+
+		err := dictionary.Delete("otter")
+
+		assertError(t, err, ErrWordDoesNotExist)
+
+		_, err = dictionary.Search(word)
+
+		assertError(t, err, nil)
+	})
+}
+
 func assertError(t testing.TB, got, want error) {
 	t.Helper()
 

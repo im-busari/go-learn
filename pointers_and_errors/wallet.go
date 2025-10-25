@@ -31,6 +31,11 @@ func (w *Wallet) Deposit(amount Bitcoin) {
 	w.balance += amount
 }
 
+func (w *Wallet) Withdraw(amount Bitcoin) {
+	fmt.Printf("address of balance from which we will withdraw is %p \n", &w.balance)
+	w.balance -= amount
+}
+
 // Things to learn to explain:
 // - pointers
 // - dereference (which is automatic in Go)

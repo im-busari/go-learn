@@ -1,5 +1,7 @@
 package mocking
 
+import "os"
+
 func main() {
-	//Countdown()
+	Countdown(os.Stdout)
 }

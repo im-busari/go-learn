@@ -1,6 +1,11 @@
 package pointers_and_errors
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
+
+var ErrInsufficientFunds = errors.New("Oh no, you are broke")
 
 // https://pkg.go.dev/fmt#Stringer
 type Stringer interface {
@@ -31,9 +36,16 @@ func (w *Wallet) Deposit(amount Bitcoin) {
 	w.balance += amount
 }
 
-func (w *Wallet) Withdraw(amount Bitcoin) {
+func (w *Wallet) Withdraw(amount Bitcoin) error {
 	fmt.Printf("address of balance from which we will withdraw is %p \n", &w.balance)
+
+	if amount > w.balance {
+		return ErrInsufficientFunds
+	}
+
 	w.balance -= amount
+
+	return nil
 }
 
 // Things to learn to explain:

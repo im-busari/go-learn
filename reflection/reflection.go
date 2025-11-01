@@ -8,18 +8,37 @@ import "reflect"
 // Reflections do checks at runtime
 
 func walk(x interface{}, fn func(input string)) {
-	val := reflect.ValueOf(x)
+	val := getValue(x)
 
-	for i := 0; i < val.NumField(); i++ {
-		field := val.Field(i)
+	numberOfValues := 0
+	var getField func(int) reflect.Value
 
-		if field.Kind() == reflect.String {
-			fn(field.String())
-		}
-
-		// To handle nested fields
-		if field.Kind() == reflect.Struct {
-			walk(field.Interface(), fn)
+	switch val.Kind() {
+	case reflect.Struct:
+		numberOfValues = val.NumField()
+		getField = val.Field
+	case reflect.Slice, reflect.Array:
+		numberOfValues = val.Len()
+		getField = val.Index
+	case reflect.String:
+		fn(val.String())
+	case reflect.Map:
+		for _, key := range val.MapKeys() {
+			walk(val.MapIndex(key).Interface(), fn)
 		}
 	}
+
+	for i := 0; i < numberOfValues; i++ {
+		walk(getField(i).Interface(), fn)
+	}
+}
+
+func getValue(x interface{}) reflect.Value {
+	val := reflect.ValueOf(x)
+
+	if val.Kind() == reflect.Pointer {
+		val = val.Elem()
+	}
+
+	return val
 }

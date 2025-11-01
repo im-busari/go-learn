@@ -45,13 +45,46 @@ func TestWalk(t *testing.T) {
 				City string
 			}{33, "London"}},
 			[]string{"Chris", "London"},
-		}, {
+		},
+		{
 			"struct with nested fields using models",
 			Person{
 				"Chris",
 				Profile{33, "London"},
 			},
 			[]string{"Chris", "London"},
+		},
+		{
+			"passing in a pointer",
+			&Person{
+				"Chris",
+				Profile{33, "London"},
+			},
+			[]string{"Chris", "London"},
+		},
+		{
+			"passing slices",
+			[]Profile{
+				{33, "London"},
+				{44, "Berlin"},
+			},
+			[]string{"London", "Berlin"},
+		},
+		{
+			"passing arrays",
+			[2]Profile{
+				{33, "London"},
+				{44, "Berlin"},
+			},
+			[]string{"London", "Berlin"},
+		},
+		{
+			"passing a map",
+			map[string]string{
+				"Cow":   "Mooo",
+				"Sheep": "Beep",
+			},
+			[]string{"Moo", "Beep"},
 		},
 	}
 

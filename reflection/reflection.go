@@ -13,6 +13,10 @@ func walk(x interface{}, fn func(input string)) {
 	numberOfValues := 0
 	var getField func(int) reflect.Value
 
+	walkValue := func(value reflect.Value) {
+		walk(value.Interface(), fn)
+	}
+
 	switch val.Kind() {
 	case reflect.Struct:
 		numberOfValues = val.NumField()
@@ -27,6 +31,14 @@ func walk(x interface{}, fn func(input string)) {
 		// that the calls to fn are done in a particular order.
 		for _, key := range val.MapKeys() {
 			walk(val.MapIndex(key).Interface(), fn)
+		}
+	case reflect.Chan:
+		for {
+			if v, ok := val.Recv(); ok {
+				walkValue(v)
+			} else {
+				break
+			}
 		}
 	}
 

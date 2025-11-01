@@ -118,6 +118,27 @@ func TestWalk(t *testing.T) {
 		assertContains(t, got, "Beep")
 	})
 
+	t.Run("with channels", func(t *testing.T) {
+		aChannel := make(chan Profile)
+
+		go func() {
+			aChannel <- Profile{33, "Berlin"}
+			aChannel <- Profile{44, "London"}
+			close(aChannel)
+		}()
+
+		var got []string
+		want := []string{"Berlin", "London"}
+
+		walk(aChannel, func(input string) {
+			got = append(got, input)
+		})
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %v, want %v", got, want)
+		}
+	})
+
 	t.Run("struct with one string field (initial test)", func(t *testing.T) {
 		expected := "Chris"
 		var got []string

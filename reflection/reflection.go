@@ -23,6 +23,8 @@ func walk(x interface{}, fn func(input string)) {
 	case reflect.String:
 		fn(val.String())
 	case reflect.Map:
+		// Remember that maps in Go do not guarantee order. So your tests will sometimes fail because we assert
+		// that the calls to fn are done in a particular order.
 		for _, key := range val.MapKeys() {
 			walk(val.MapIndex(key).Interface(), fn)
 		}
